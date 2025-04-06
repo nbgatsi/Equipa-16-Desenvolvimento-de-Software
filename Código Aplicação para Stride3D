@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+
+namespace GameControlApp
+{
+    public class GameControlForm : Form
+    {
+        private TextBox inputBox;
+        private Button sendButton;
+        private ListBox logBox;
+        private List<string> log = new List<string>();
+
+        public GameControlForm()
+        {
+            this.Text = "Protótipo - Controle de Jogo";
+            this.Width = 500;
+            this.Height = 400;
+
+            inputBox = new TextBox() { Top = 20, Left = 20, Width = 340 };
+            sendButton = new Button() { Text = "Enviar Comando", Top = 20, Left = 370, Width = 100 };
+            sendButton.Click += OnSendCommand;
+
+            logBox = new ListBox() { Top = 60, Left = 20, Width = 450, Height = 280 };
+
+            this.Controls.Add(inputBox);
+            this.Controls.Add(sendButton);
+            this.Controls.Add(logBox);
+        }
+
+        private void OnSendCommand(object sender, EventArgs e)
+        {
+            string command = inputBox.Text.Trim();
+            if (string.IsNullOrEmpty(command)) return;
+
+            log.Insert(0, $"App: Comando '{command}' enviado ao Stride3D");
+            log.Insert(0, $"Usuário: {command}");
+
+            logBox.Items.Clear();
+            foreach (var entry in log)
+            {
+                logBox.Items.Add(entry);
+            }
+
+            inputBox.Text = "";
+        }
+
+        [STAThread]
+        public static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.Run(new GameControlForm());
+        }
+    }
+}
