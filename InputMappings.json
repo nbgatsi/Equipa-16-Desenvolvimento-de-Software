@@ -1,0 +1,6 @@
+{
+  "MoveRight": ["D", "SetaDireita"],
+  "MoveLeft":  ["A", "SetaEsquerda"],
+  "Jump":      ["Space", "BotaoA"],
+  "Fire":      ["MouseLeft", "BotaoX"]
+}
