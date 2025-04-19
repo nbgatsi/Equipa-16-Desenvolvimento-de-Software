@@ -1,18 +1,33 @@
 {
-  "MoveRight": [
-    { "inputType": "Keyboard", "key": "D" },
-    { "inputType": "Keyboard", "key": "ArrowRight" }
-  ],
-  "MoveLeft": [
-    { "inputType": "Keyboard", "key": "A" },
-    { "inputType": "Keyboard", "key": "ArrowLeft" }
-  ],
-  "Jump": [
-    { "inputType": "Keyboard", "key": "Space" },
-    { "inputType": "Gamepad",  "button": "A" }
-  ],
-  "Fire": [
-    { "inputType": "Mouse",    "button": "LeftButton" },
-    { "inputType": "Gamepad",  "button": "X" }
+  "Name": "InputMappings",
+  "Actions": [
+    {
+      "Name": "MoveRight",
+      "Gestures": [
+        { "Key": "D" },
+        { "Key": "Right" }
+      ]
+    },
+    {
+      "Name": "MoveLeft",
+      "Gestures": [
+        { "Key": "A" },
+        { "Key": "Left" }
+      ]
+    },
+    {
+      "Name": "Jump",
+      "Gestures": [
+        { "Key": "Space" },
+        { "GamepadButton": "A" }
+      ]
+    },
+    {
+      "Name": "Fire",
+      "Gestures": [
+        { "MouseButton": "Left" },
+        { "GamepadButton": "X" }
+      ]
+    }
   ]
 }
