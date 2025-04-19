@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Input;
+using Stride.Content;
 
 namespace MotorDeFisica.SistemaDeEntrada
 {
@@ -12,28 +14,29 @@ namespace MotorDeFisica.SistemaDeEntrada
     /// </summary>
     public class InputManager : SyncScript
     {
-        // Exemplo de mapeamento para teclas
         private Dictionary<string, List<Keys>> keyMappings;
-
-        // Opcional: mapeamento para botões de gamepad
         private Dictionary<string, List<GamePadButton>> gamepadMappings;
 
-        public InputManager()
+        public override void Start()
         {
-            // Exemplo de configurações iniciais.
-            // Podes carregar isto de um ficheiro JSON (InputMappings.json)
-            keyMappings = new Dictionary<string, List<Keys>>
-            {
-                { "MoveLeft",  new List<Keys> { Keys.A, Keys.Left } },
-                { "MoveRight", new List<Keys> { Keys.D, Keys.Right } },
-                { "Jump",      new List<Keys> { Keys.Space } }
-            };
+            // Carregamento do asset InputMappings gerado a partir do JSON
+            var asset = Content.Load<InputMappingsAsset>("InputMappings");
 
-            gamepadMappings = new Dictionary<string, List<GamePadButton>>
-            {
-                { "Jump", new List<GamePadButton> { GamePadButton.A } },
-                { "Fire", new List<GamePadButton> { GamePadButton.RightShoulder } }
-            };
+            keyMappings = asset.Actions
+                .ToDictionary(
+                    action => action.Name,
+                    action => action.Gestures
+                        .Where(g => g.HasKey)
+                        .Select(g => g.Key)
+                        .ToList());
+
+            gamepadMappings = asset.Actions
+                .ToDictionary(
+                    action => action.Name,
+                    action => action.Gestures
+                        .Where(g => g.HasGamepadButton)
+                        .Select(g => g.GamepadButton)
+                        .ToList());
         }
 
         public override void Update()
@@ -51,13 +54,11 @@ namespace MotorDeFisica.SistemaDeEntrada
 
             foreach (var mapping in keyMappings)
             {
-                string acao = mapping.Key;
-                var teclas = mapping.Value;
-                foreach (var tecla in teclas)
+                foreach (var tecla in mapping.Value)
                 {
                     if (keyboard.IsKeyPressed(tecla))
                     {
-                        DispararAcao(acao);
+                        DispararAcao(mapping.Key);
                         break;
                     }
                 }
@@ -70,12 +71,10 @@ namespace MotorDeFisica.SistemaDeEntrada
             if (mouse == null)
                 return;
 
-            // Exemplos:
-            // Se quiseres detetar clique esquerdo:
-            // if (mouse.IsButtonPressed(MouseButton.Left)) { DispararAcao("Fire"); }
-
-            // Se quiseres ler a posição do rato:
-            // var pos = mouse.Position;
+            if (mouse.IsButtonPressed(MouseButton.Left))
+            {
+                DispararAcao("Fire");
+            }
         }
 
         private void CapturarGamepad()
@@ -88,29 +87,21 @@ namespace MotorDeFisica.SistemaDeEntrada
 
                 foreach (var mapping in gamepadMappings)
                 {
-                    string acao = mapping.Key;
-                    var botoes = mapping.Value;
-                    foreach (var botao in botoes)
+                    foreach (var botao in mapping.Value)
                     {
                         if (gamepad.IsButtonPressed(botao))
                         {
-                            DispararAcao(acao);
+                            DispararAcao(mapping.Key);
                             break;
                         }
                     }
                 }
-
-                // Se quiseres ler os eixos analógicos, ex.:
-                // var leftStick = gamepad.LeftThumbAxis;
             }
         }
 
         private void DispararAcao(string acao)
         {
-            // Exemplo de debug no ecrã
             DebugText.Print($"Ação detectada: {acao}", new Int2(10, 10));
-
-            // Aqui poderias chamar um método do Controller, p.ex.:
             // Controller.ProcessarAcao(acao);
         }
     }
