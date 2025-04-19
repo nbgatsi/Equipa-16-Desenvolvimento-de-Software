@@ -1,6 +1,18 @@
 {
-  "MoveRight": ["D", "SetaDireita"],
-  "MoveLeft":  ["A", "SetaEsquerda"],
-  "Jump":      ["Space", "BotaoA"],
-  "Fire":      ["MouseLeft", "BotaoX"]
+  "MoveRight": [
+    { "inputType": "Keyboard", "key": "D" },
+    { "inputType": "Keyboard", "key": "ArrowRight" }
+  ],
+  "MoveLeft": [
+    { "inputType": "Keyboard", "key": "A" },
+    { "inputType": "Keyboard", "key": "ArrowLeft" }
+  ],
+  "Jump": [
+    { "inputType": "Keyboard", "key": "Space" },
+    { "inputType": "Gamepad",  "button": "A" }
+  ],
+  "Fire": [
+    { "inputType": "Mouse",    "button": "LeftButton" },
+    { "inputType": "Gamepad",  "button": "X" }
+  ]
 }
